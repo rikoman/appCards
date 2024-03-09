@@ -12,34 +12,25 @@
                                  class="bd-placeholder-img card-img-top" width="100%" height="225"
                                  xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Эскиз"
                                  preserveAspectRatio="xMidYMid slice" focusable="false">
-
                             <div class="card-body">
                                 <h3 class="card-text">{{ $project->title }}</h3>
                                 <p>{{$project->description}}</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <a href="{{route('project.show',['project'=>$project->id])}}" type="button"
-                                           class="btn btn-sm btn-outline-secondary">Смотреть</a>
+                                        <a href="{{route('project.show',['project'=>$project->id])}}" type="button" class="btn btn-sm btn-outline-secondary">Смотреть</a>
                                         @if (Auth::user()->can(['update','delete'], $project))
-                                            <a href="{{ route('project.edit', ['project' => $project->id]) }}"
-                                               type="button" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+                                            <a href="{{ route('project.edit', ['project' => $project->id]) }}" type="button" class="btn btn-sm btn-outline-secondary">Редактировать</a>
                                             <form
-                                                action="{{ route('project.destroy', $project->id) }}"
-                                                method="post">
+                                                action="{{ route('project.destroy', $project->id) }}" method="post">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-secondary">Удалить
-                                                </button>
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary">Удалить</button>
                                             </form>
                                         @endif
-                                        @if(Auth::user()->id != $project->user_id)
-                                            <form action="{{ route('project.unsubscribed', $project) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="btn btn-sm btn-outline-secondary">
-                                                    Отписаться
-                                                </button>
-                                            </form>
-                                        @endif
+                                        <form action="{{ route('project.unsubscribed', $project) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-outline-secondary">Отписаться</button>
+                                        </form>
                                     </div>
                                     <small class="text-muted">{{$project->created_at->format('d-m-y')}}</small>
                                 </div>

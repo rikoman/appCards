@@ -1,133 +1,71 @@
 @extends('base')
 @section('title', $category->title );
 @section('main')
-    <h2>категория - {{ $category->title }}</h2>
-    <style>
-        * {
-            box-sizing: border-box
-        }
+    @vite('resources/css/card/main.css')
+    <p><a href="{{route('project.show',compact('project'))}}">На перечень категорий надо будет удалить</a></p>
 
-        body {
-            font-family: Verdana, sans-serif;
-            margin: 0
-        }
-
-        .mySlides {
-            display: none
-        }
-
-        img {
-            vertical-align: middle;
-        }
-
-        /* Slideshow container */
-        .slideshow-container {
-            max-width: 1000px;
-            position: relative;
-            margin: auto;
-        }
-
-        .olo {
-            width: 100%;
-            height: 400px;
-            background-color: indianred;
-        }
-
-        /* Next & previous buttons */
-        .prev, .next {
-            cursor: pointer;
-            position: absolute;
-            top: 50%;
-            width: auto;
-            padding: 16px;
-            margin-top: -22px;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-            transition: 0.6s ease;
-            border-radius: 0 3px 3px 0;
-        }
-
-        /* Position the "next button" to the right */
-        .next {
-            right: 0;
-            border-radius: 3px 0 0 3px;
-        }
-
-        /* On hover, add a black background color with a little bit see-through */
-        .prev:hover, .next:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
-        /* Caption text */
-        .text {
-            color: #f2f2f2;
-            font-size: 15px;
-            padding: 8px 12px;
-            position: absolute;
-            bottom: 8px;
-            width: 100%;
-            text-align: center;
-        }
-
-        /* Number text (1/3 etc) */
-        .numbertext {
-            color: #f2f2f2;
-            font-size: 12px;
-            padding: 8px 12px;
-            position: absolute;
-            top: 0;
-        }
-
-        /* The dots/bullets/indicators */
-        .dot {
-            cursor: pointer;
-            height: 15px;
-            width: 15px;
-            margin: 0 2px;
-            background-color: #bbb;
-            border-radius: 50%;
-            display: inline-block;
-            transition: background-color 0.6s ease;
-        }
-
-        .active, .dot:hover {
-            background-color: #717171;
-        }
-
-        /* Fading animation */
-
-        /* On smaller screens, decrease text size */
-        @media only screen and (max-width: 300px) {
-            .prev, .next, .text {
-                font-size: 11px
-            }
-        }
-
-        .oner {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-        }
-    </style>
-
-    <div class="slideshow-container">
-        @foreach($cards as $key => $card)
-            <div class="mySlides">
-                <div class="numbertext">1 / 3</div>
-                <div class="olo " onclick="toggleCard(this)">
-                    <div class="card-body oner">
-                        <h3 class="card-title">{{ $card->term }}</h3>
-                        <h3 class="card-text" style="display: none;">{{ $card->definition }}</h3>
+    @if(count($cards)>0)
+        <div class="slideshow-container">
+            @foreach($cards as $key => $card)
+                <div class="mySlides">
+                    <div class="numbertext">{{$key+1}} / {{count($cards)}}</div>
+                    <div class="card-container " onclick="toggleCard(this)">
+                        <div class="card-body card-content">
+                            <h1 class="card-title" style="color: green">{{ $card->term }}</h1>
+                            <h1 class="card-text" style="display: none; color: red">{{ $card->definition }}</h1>
+                        </div>
                     </div>
                 </div>
-            </div>
-        @endforeach
-        <a class="prev" onclick="plusSlides(-1)">❮</a>
-        <a class="next" onclick="plusSlides(1)">❯</a>
-    </div>
+            @endforeach
+            <a class="prev" onclick="plusSlides(-1)">❮</a>
+            <a class="next" onclick="plusSlides(1)">❯</a>
+        </div>
+    @endif
     <br>
+
+    @auth
+        @if(Auth::user()->can(['update'], $project))
+            <div>
+                <p><a style="width: 100%; margin-bottom: 10px" type="button"
+                      href="{{route('card.create',compact('category','project'))}}"
+                      class="btn btn-outline-success btn-lg btn-block">Создать карточку</a></p>
+            </div>
+        @endif
+    @endauth
+
+    @if(count($cards) > 0)
+        <table class="table">
+            <tbody>
+            @foreach ($cards as $card)
+                <tr>
+                    <td><h4>{{ $card->term }}</h4></td>
+                    <td><h4>{{ $card->definition }}</h4></td>
+                    @auth
+                        @if(Auth::user()->can(['update'], $project))
+                            <td>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <a class="btn btn-outline-success"
+                                           href="{{ route('card.edit', ['project' => $project->id, 'category' => $category->id, 'card' => $card->id]) }}">Редактировать</a>
+                                    </div>
+                                    <div>
+                                        <form
+                                            action="{{ route('card.destroy', ['project' => $project->id, 'category' => $category->id, 'card' => $card->id]) }}"
+                                            method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-outline-danger">Удалить</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </td>
+                        @endif
+                    @endauth
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    @endif
 
     <script>
         var slideIndex = 1;
@@ -173,64 +111,31 @@
             }
         }
     </script>
-    <p><a href="{{route('project.show',compact('project'))}}">На перечень категорий</a></p>
-
-    <form action="{{ route('comment.storecat', ['project' => $project->id, 'category' => $category->id]) }}"
-          method="post">
-        @csrf
-        <textarea name="content" rows="4" cols="50"></textarea>
-        <button type="submit">Add Comment</button>
-    </form>
-
-    @foreach($category->comments()->get() as $comment)
-        <p>{{$comment->content}} - {{$comment->user->name }} -- {{$comment->created_at}}</p>
-        <form action="{{ route('comment.update.cat', compact('project','category','comment')) }}" method="POST">
-            @csrf
-            @method('PATCH')
-            <textarea name="content" rows="4" cols="50"></textarea>
-            <button type="submit">Update Comment</button>
-        </form>
-        <form action="{{ route('comment.destroy.cat', compact('project','category','comment')) }}" method="POST">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger btn-sm">Delete Comment</button>
-        </form>
-    @endforeach
-    @auth
-        @if(Auth::user()->can(['update'], $project))
-            <p><a href="{{route('card.create',compact('category','project'))}}">Создать карточку</a></p>
-        @endif
-    @endauth
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Название</th>
-            <th>Определение</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach ($cards as $card)
-            <tr>
-                <td><h3>{{ $card->term }}</h3></td>
-                <td>{{ $card->definition }}</td>
-                @auth
-                    @if(Auth::user()->can(['update'], $project))
-                        <td>
-                            <a href="{{ route('card.edit', ['project' => $project->id, 'category' => $category->id, 'card' => $card->id]) }}">Изменить</a>
-                        </td>
-                        <td>
-                            <form
-                                action="{{ route('card.destroy', ['project' => $project->id, 'category' => $category->id, 'card' => $card->id]) }}"
-                                method="post">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
-                        </td>
-                    @endif
-                @endauth
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
 @endsection
+
+
+<!--
+    Комментарии, потом надо будеть сделать норм стили
+-->
+
+{{--    <form action="{{ route('comment.storecat', ['project' => $project->id, 'category' => $category->id]) }}"--}}
+{{--          method="post">--}}
+{{--        @csrf--}}
+{{--        <textarea name="content" rows="4" cols="50"></textarea>--}}
+{{--        <button type="submit">Add Comment</button>--}}
+{{--    </form>--}}
+
+{{--    @foreach($category->comments()->get() as $comment)--}}
+{{--        <p>{{$comment->content}} - {{$comment->user->name }} -- {{$comment->created_at}}</p>--}}
+{{--        <form action="{{ route('comment.update.cat', compact('project','category','comment')) }}" method="POST">--}}
+{{--            @csrf--}}
+{{--            @method('PATCH')--}}
+{{--            <textarea name="content" rows="4" cols="50"></textarea>--}}
+{{--            <button type="submit">Update Comment</button>--}}
+{{--        </form>--}}
+{{--        <form action="{{ route('comment.destroy.cat', compact('project','category','comment')) }}" method="POST">--}}
+{{--            @csrf--}}
+{{--            @method('DELETE')--}}
+{{--            <button type="submit" class="btn btn-danger btn-sm">Delete Comment</button>--}}
+{{--        </form>--}}
+{{--    @endforeach--}}

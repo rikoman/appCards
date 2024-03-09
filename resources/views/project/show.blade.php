@@ -1,152 +1,154 @@
-{{--@extends('base')--}}
-{{--@section('title', $project->title );--}}
-{{--@section('main')--}}
-{{--    @auth--}}
-{{--        @if (Auth::user()->can(['update','delete'], $project))--}}
-{{--            <td>--}}
-{{--                <a href="{{ route('project.edit', ['project' => $project->id]) }}">Изменить</a>--}}
-{{--            </td>--}}
-{{--            <td>--}}
-{{--                <form action="{{ route('project.destroy', $project->id) }}" method="post">--}}
-{{--                    @csrf--}}
-{{--                    @method('DELETE')--}}
-{{--                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>--}}
-{{--                </form>--}}
-{{--            </td>--}}
-{{--        @endif--}}
-{{--    @endauth--}}
-{{--    <img src="{{ asset('storage/projects/' . $project->image) }}" alt="Изображение проекта" width="400px">--}}
-{{--    <h2>Наименование: {{ $project->title }}</h2>--}}
-{{--    <p>Описание проекта: {{ $project->description }}</p>--}}
-{{--    <p>Автор: {{ $project->user->name }}</p>--}}
-{{--    <p>Дата создания: {{$project->created_at}}</p>--}}
-{{--    @foreach($categories as $category)--}}
-{{--        <a href="{{route('category.show',['project'=>$project->id,'category'=>$category->id])}}">--}}
-{{--            <li>{{ $category->title }} - {{ $category->description }}</li>--}}
-{{--        </a>--}}
-{{--        <p>терминов - {{count($category->cards)}}</p>--}}
-{{--        @auth--}}
-{{--            @if (Auth::user()->can(['update','delete'], $project))--}}
-{{--                <a href="{{ route('category.edit', ['project'=>$project->id,'category'=>$category->id]) }}">Изменить</a>--}}
-{{--                <form action="{{ route('category.destroy',  ['project'=>$project->id,'category'=>$category->id]) }}"--}}
-{{--                      method="post">--}}
-{{--                    @csrf--}}
-{{--                    @method('DELETE')--}}
-{{--                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>--}}
-{{--                </form>--}}
-{{--            @endif--}}
-{{--        @endauth--}}
-{{--    @endforeach--}}
-{{--    @auth--}}
-{{--        @if (Auth::user()->can(['update'], $project))--}}
-{{--            <p><a href="{{route('category.create',$project)}}">Создать категорию</a></p>--}}
-{{--        @endif--}}
-{{--    @endauth--}}
-{{--    <p><a href="{{route('project.index')}}">На перечень проектов</a></p>--}}
-
-{{--    <form action="{{ route('comment.store',  $project) }}" method="post">--}}
-{{--        @csrf--}}
-{{--        <textarea name="content" rows="4" cols="50"></textarea>--}}
-{{--        <button type="submit">Add Comment</button>--}}
-{{--    </form>--}}
-
-{{--    @foreach($project->comments()->get() as $comment)--}}
-{{--        <p>{{$comment->content}} - {{$comment->user->name }} -- {{$comment->created_at}}</p>--}}
-{{--        <form action="{{ route('comment.update', compact('project','comment')) }}" method="POST">--}}
-{{--            @csrf--}}
-{{--            @method('PATCH')--}}
-{{--            <textarea name="content" rows="4" cols="50"></textarea>--}}
-{{--            <button type="submit">Update Comment</button>--}}
-{{--        </form>--}}
-{{--        <form action="{{ route('comment.destroy', compact('project','comment')) }}" method="POST">--}}
-{{--            @csrf--}}
-{{--            @method('DELETE')--}}
-{{--            <button type="submit" class="btn btn-danger btn-sm">Delete Comment</button>--}}
-{{--        </form>--}}
-{{--    @endforeach--}}
-{{--@endsection--}}
-
 @extends('base')
 @section('title', $project->title )
 @section('main')
-    @auth
-        @if (Auth::user()->can(['update','delete'], $project))
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <a href="{{ route('project.edit', ['project' => $project->id]) }}" class="btn btn-primary">Изменить</a>
-                <form action="{{ route('project.destroy', $project->id) }}" method="post">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Удалить</button>
-                </form>
-            </div>
-        @endif
-    @endauth
-    <img src="{{ asset('storage/projects/' . $project->image) }}" alt="Изображение проекта" class="img-fluid mb-3">
-    <h2>{{ $project->title }}</h2>
-    <p>{{ $project->description }}</p>
-    <p>Автор: {{ $project->user->name }}</p>
-    <p>Дата создания: {{$project->created_at}}</p>
-    @foreach($categories as $category)
-        <div class="card mb-3">
-            <a href="{{route('category.show',['project'=>$project->id,'category'=>$category->id])}}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $category->title }}</h5>
-                    <p class="card-text">{{ $category->description }}</p>
-                    <p>Терминов: {{ count($category->cards) }}</p>
-                </div>
-            </a>
+    <p><a href="{{route('project.index')}}" class="btn btn-secondary">На перечень проектов надо будет удалить</a></p>
+    <div style="width: 70%; margin: auto">
+
+        <img src="{{ asset('storage/projects/' . $project->image) }}" alt="Изображение проекта" class="img-fluid mb-3"
+             width="100%" style="margin: auto">
+
+    </div>
+
+    <h2>Категория: {{ $project->title }}</h2>
+    <h3>Описание:{{ $project->description }}</h3>
+    <h3>Автор: {{ $project->user->name }}</h3>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h3>Дата создания: {{$project->created_at}}</h3>
+
+        <div>
             @auth
                 @if (Auth::user()->can(['update','delete'], $project))
-                    <div class="card-footer">
-                        <a href="{{ route('category.edit', ['project'=>$project->id,'category'=>$category->id]) }}"
-                           class="btn btn-primary">Изменить</a>
-                        <form
-                            action="{{ route('category.destroy',  ['project'=>$project->id,'category'=>$category->id]) }}"
-                            method="post">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                        <a href="{{ route('project.edit', ['project' => $project->id]) }}"
+                           class="btn btn-outline-success" style="margin-right: 5px">Редактировать</a>
+
+                        <form action="{{ route('project.destroy', $project->id) }}" method="post">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Удалить</button>
+                            <button type="submit" class="btn btn-outline-danger">Удалить</button>
                         </form>
+
                     </div>
                 @endif
             @endauth
         </div>
-    @endforeach
+    </div>
+
     @auth
         @if (Auth::user()->can(['update'], $project))
-            <p><a href="{{route('category.create',$project)}}" class="btn btn-success">Создать категорию</a></p>
+            <a style="width: 100%; margin-bottom: 10px" type="button"
+               href="{{route('category.create',compact('project'))}}" class="btn btn-outline-success btn-lg btn-block">Cоздать
+                категорию</a>
         @endif
     @endauth
-    <p><a href="{{route('project.index')}}" class="btn btn-secondary">На перечень проектов</a></p>
 
-    <form action="{{ route('comment.store',  $project) }}" method="post" class="mb-3">
-        @csrf
-        <div class="form-group">
-            <textarea name="content" rows="4" class="form-control"></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Добавить комментарий</button>
-    </form>
+    @if (count($categories) > 0)
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            @foreach($categories as $category)
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h3 class="card-text">{{ $category->title }}</h3>
+                            <p>{{$category->description}}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
 
-    @foreach($project->comments()->get() as $comment)
-        <div class="card mb-3">
-            <div class="card-body">
-                <p class="card-text">{{ $comment->content }} - {{ $comment->user->name }}
-                    -- {{ $comment->created_at }}</p>
-            </div>
-            <div class="card-footer">
-                <form action="{{ route('comment.update', compact('project','comment')) }}" method="POST">
-                    @csrf
-                    @method('PATCH')
-                    <div class="form-group">
-                        <textarea name="content" rows="4" class="form-control">{{ $comment->content }}</textarea>
+                                    <a href="{{route('category.show',compact('project','category'))}}" type="button"
+                                       class="btn btn-sm btn-outline-secondary">Смотреть</a>
+                                    @auth
+                                        @if (Auth::user()->can(['update','delete'], $project))
+
+                                            <a href="{{ route('category.edit', compact('project','category')) }}"
+                                               type="button" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+
+                                            <form action="{{ route('category.destroy',compact('project','category')) }}"
+                                                  method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary">Удалить
+                                                </button>
+                                            </form>
+
+                                        @endif
+                                    @endauth
+                                </div>
+
+                                <small class="text-muted">{{$category->created_at->format('d-m-y')}}</small>
+
+                            </div>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Обновить комментарий</button>
-                </form>
-                <form action="{{ route('comment.destroy', compact('project','comment')) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Удалить комментарий</button>
-                </form>
-            </div>
-    @endforeach
+                </div>
+            @endforeach
+        </div>
+    @endif
 @endsection
+
+
+
+
+<!--
+    Комментарии, потом надо будеть сделать норм стили
+-->
+
+{{--    <div class="row" style="margin-top: 20px">--}}
+{{--        <div class="col-md-12">--}}
+{{--            <div class="panel panel-info">--}}
+{{--                <div class="panel-heading">Комментарии</div>--}}
+
+{{--                <div class="panel-body comments">--}}
+{{--                    <form action="{{ route('comment.store',  $project) }}" method="post" class="mb-3">--}}
+{{--                        @csrf--}}
+{{--                            <textarea name="content" class="form-control" placeholder="Оставьте Ваш комментарий" rows="5"></textarea>--}}
+{{--                        <br>--}}
+{{--                        <button type="submit" class="btn btn-info pull-right">Отправить</button>--}}
+{{--                    </form>--}}
+
+{{--                    @foreach($project->comments()->get() as $comment)--}}
+{{--                        <div class="clearfix"></div>--}}
+{{--                        <hr>--}}
+{{--                        <ul class="media-list">--}}
+{{--                            <li class="media">--}}
+{{--                                <div class="comment">--}}
+{{--                                    <div>--}}
+{{--                                        <a href="#" class="pull-left">--}}
+{{--                                            <img src="https://bootstraptema.ru/snippets/element/2016/comments/com-1.jpg" alt="" class="img-circle">--}}
+{{--                                        </a>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="media-body">--}}
+{{--                                        <strong class="text-success">{{$comment->user->name }}</strong>--}}
+{{--                                        <span class="text-muted">--}}
+{{--                                                <small class="text-muted">{{ $comment->created_at }}</small>--}}
+{{--                                        </span>--}}
+{{--                                        <p>--}}
+{{--                                            {{ $comment->content }}--}}
+{{--                                        </p>--}}
+{{--                                    </div>--}}
+
+{{--                                    @if(Auth::user()->id == $comment->user_id)--}}
+{{--                                        <form action="{{ route('comment.update', compact('project','comment')) }}" method="POST" class="dropdown-item">--}}
+{{--                                            @csrf--}}
+{{--                                            @method('PATCH')--}}
+{{--                                            <div class="form-group">--}}
+{{--                                                <textarea name="content" rows="4" class="form-control">{{ $comment->content }}</textarea>--}}
+{{--                                            </div>--}}
+{{--                                            <button type="submit" class="btn btn-primary">Обновить комментарий</button>--}}
+{{--                                        </form>--}}
+
+{{--                                        <form action="{{ route('comment.destroy', compact('project','comment')) }}" method="POST" class="dropdown-item">--}}
+{{--                                            @csrf--}}
+{{--                                            @method('DELETE')--}}
+{{--                                            <button type="submit" class="btn btn-danger">Удалить комментарий</button>--}}
+{{--                                        </form>--}}
+{{--                                    @endif--}}
+{{--                                </div>--}}
+{{--                            </li>--}}
+{{--                        </ul>--}}
+{{--                    @endforeach--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}

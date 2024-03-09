@@ -4,8 +4,7 @@
     @auth()
         <h1>Мои проекты</h1>
         <div>
-            <a style="width: 100%; margin-bottom: 10px" type="button" href="{{route('project.create')}}"
-               class="btn btn-primary btn-lg btn-block">создать проект</a>
+            <a style="width: 100%; margin-bottom: 10px" type="button" href="{{route('project.create')}}" class="btn btn-outline-success btn-lg btn-block">Cоздать проект</a>
         </div>
         @if (count($projects) > 0)
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -24,15 +23,11 @@
                                         <a href="{{route('project.show',['project'=>$project->id])}}" type="button"
                                            class="btn btn-sm btn-outline-secondary">Смотреть</a>
                                         @if (Auth::user()->can(['update','delete'], $project))
-                                            <a href="{{ route('project.edit', ['project' => $project->id]) }}"
-                                               type="button" class="btn btn-sm btn-outline-secondary">Редактировать</a>
-                                            <form
-                                                action="{{ route('project.destroy', $project->id) }}"
-                                                method="post">
+                                            <a href="{{ route('project.edit', ['project' => $project->id]) }}" type="button" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+                                            <form action="{{ route('project.destroy', $project->id) }}" method="post">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-secondary">Удалить
-                                                </button>
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary">Удалить</button>
                                             </form>
                                         @endif
                                     </div>

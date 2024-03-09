@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Create New Card</div>
+                    <div class="card-header">Создание карточки</div>
 
                     <div class="card-body">
                         <form method="POST"
@@ -13,16 +13,16 @@
                             @csrf
 
                             <div class="form-group">
-                                <label for="term">Title</label>
+                                <label for="term">Термин</label>
                                 <input type="text" name="term" id="term" class="form-control" required>
                             </div>
 
                             <div class="form-group">
-                                <label for="definition">Title</label>
+                                <label for="definition">Определение</label>
                                 <input type="text" name="definition" id="definition" class="form-control" required>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Create Card</button>
+                            <button type="submit" class="btn btn-primary">Создать</button>
                         </form>
                     </div>
                 </div>
