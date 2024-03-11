@@ -1,7 +1,7 @@
 @extends('base')
 @section('title', $project->title )
 @section('main')
-    <p><a href="{{route('project.index')}}" class="btn btn-secondary">На перечень проектов надо будет удалить</a></p>
+{{--    <p><a href="{{route('project.index')}}" class="btn btn-secondary">На перечень проектов надо будет удалить</a></p>--}}
     <div style="width: 70%; margin: auto">
 
         <img src="{{ asset('storage/projects/' . $project->image) }}" alt="Изображение проекта" class="img-fluid mb-3"
@@ -85,6 +85,143 @@
             @endforeach
         </div>
     @endif
+
+    <div class="comments-section" style="margin-top: 30px">
+        <!-- Форма для добавления нового комментария -->
+        <form method="POST"
+              action="{{ route('comment.store', ['project' => $project->id]) }}"
+        >
+            @csrf
+            <textarea name="content" placeholder="Напишите сообщение" rows="3"></textarea>
+            <button type="submit">Отправить</button>
+        </form>
+
+        <!-- Список комментариев -->
+        <div class="comments-list">
+            @foreach ($project->comments()->get() as $comment)
+                <div class="comment">
+                    <div class="user-info">
+                        <div>
+                            <span>{{ $comment->user->name }}</span>
+                            <small>{{ $comment->created_at->format('j M Y, g:i a') }}</small>
+                        </div>
+                        @if ($comment->user == auth()->user())
+                            <div class="dropdown">
+                                <button onclick="toggleMenu(this)">
+                                    #
+                                </button>
+                                <div class="dropdown-menu hidden">
+                                    <a href="{{ route('comment.edit',compact('project','comment')) }}">Редактировать</a>
+                                    <form method="POST" action="{{ route('comment.destroy', compact('project','comment')) }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit">Удалить</button>
+                                    </form>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                    <p>{{ $comment->content }}</p>
+                </div>
+            @endforeach
+        </div>
+    </div>
+
+    <style>
+
+        .comments-section form {
+            margin-bottom: 20px;
+        }
+
+        .comments-section form textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .comments-section form button {
+            background-color: #3490dc;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .comments-section form button:hover {
+            background-color: #2779bd;
+        }
+
+        /*Стили для выпадающего списка*/
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .dropdown .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 120px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+
+        .dropdown .dropdown-menu a {
+            color: #333;
+            padding: 8px 12px;
+            display: block;
+            text-decoration: none;
+        }
+
+        .dropdown .dropdown-menu a:hover {
+            background-color: #f1f1f1;
+        }
+        /*Стили для блока комментариев*/
+        .comment {
+            padding: 12px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+
+        .comment .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .comment .user-info small {
+            color: #777;
+            font-size: 0.8rem;
+        }
+
+        .comment .dropdown button {
+            font-size: 1rem;
+            color: #999;
+        }
+
+        .comment .content {
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        function toggleMenu(button) {
+            var menu = button.nextElementSibling;
+            if (menu.style.display === 'block') {
+                menu.style.display = 'none';
+            } else {
+                menu.style.display = 'block';
+            }
+        }
+    </script>
 @endsection
 
 

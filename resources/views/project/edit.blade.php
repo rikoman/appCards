@@ -31,7 +31,12 @@
                             </span>
                             @enderror
                         </div>
-                        <input type="file" name="image" accept="image/png, image/jpeg"/>
+                        <input type="file" name="image" class="@error('image') is-invalid @enderror accept="image/png, image/jpeg"/>
+                        @error('image')
+                        <span class="invalid-feedback">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
 
                         <input type="submit" class="btn btn-primary" value="Сохранить">
                     </form>
