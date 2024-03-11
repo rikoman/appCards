@@ -91,14 +91,18 @@ Route::prefix('/app/projects/{project}/categories/{category}/cards')->group(func
 /**
  * model comment
  */
-Route::prefix('/app/projects/{project}/comment')->group(function () {
+Route::prefix('/app/projects/{project}/comments')->group(function () {
     Route::post('/', [CommentController::class, 'store'])->name('comment.store');
+    Route::get('/{comment}/edit', [CommentController::class, 'edit'])->name('comment.edit');
     Route::patch('/{comment}', [CommentController::class, 'updatep'])->name('comment.update');
     Route::delete('/{comment}', [CommentController::class, 'destroyp'])->name('comment.destroy');
 
-    Route::prefix('/categories/{category}/comment')->group(function () {
-        Route::post('/', [CommentController::class, 'storeCat'])->name('comment.storecat');
-        Route::patch('/{comment}', [CommentController::class, 'update'])->name('comment.update.cat');
-        Route::delete('/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy.cat');
-    });
+
+});
+
+Route::prefix('/app/projects/{project}/categories/{category}/comments')->group(function () {
+    Route::post('/', [CommentController::class, 'storeCat'])->name('comment.storecat');
+    Route::get('/{comment}/edit', [CommentController::class, 'edit'])->name('comment.edit.cat');
+    Route::patch('/{comment}', [CommentController::class, 'update'])->name('comment.update.cat');
+    Route::delete('/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy.cat');
 });
