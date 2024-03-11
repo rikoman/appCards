@@ -49,12 +49,19 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
+        $data = null;
+
         $validated = $request->validate(
-            self::PROJECT_VALIDATOR,
-            self::PROJECT_ERROR_MESSAGES
+            [
+                self::PROJECT_VALIDATOR,
+                'image'=>'required'
+            ],
+            self::PROJECT_ERROR_MESSAGES,
         );
 
-        $data = $request->file('image')->store('', 'projects');
+        if ($request->hasFile('image')){
+            $data = $request->file('image')->store('', 'projects');
+        }
 
         Auth::user()->projects()->create([
             'title' => $validated['title'],
@@ -89,12 +96,16 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
+        $data = $project->image;
+
         $validated = $request->validate(
             self::PROJECT_VALIDATOR,
             self::PROJECT_ERROR_MESSAGES
         );
 
-        $data = $request->file('image')->store('', 'projects');
+        if ($request->hasFile('image')){
+            $data = $request->file('image')->store('', 'projects');
+        }
 
         $project->fill([
             'title' => $validated['title'],
