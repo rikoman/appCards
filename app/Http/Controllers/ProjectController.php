@@ -25,14 +25,14 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::orderBy('numberOfVisits', 'desc')->paginate(10);
+        $projects = Project::orderBy('numberOfVisits', 'desc')->paginate(9);
         return view('project.index', compact('projects'));
     }
 
 
     public function home()
     {
-        $projects = Auth::user()->projects()->get();
+        $projects = Auth::user()->projects()->paginate(6);
         return view('project.home', compact('projects'));
     }
 
@@ -79,7 +79,7 @@ class ProjectController extends Controller
         $project->increment('numberOfVisits');
         $project->save();
 
-        $categories = $project->categories()->get();
+        $categories = $project->categories()->paginate(9);
         return view('project.show', compact('project', 'categories'));
     }
 
@@ -141,6 +141,6 @@ class ProjectController extends Controller
 
     public function subProjects()
     {
-        return view('subprojects', ['subprojects' => Auth::user()->subprojects()->get()]);
+        return view('subprojects', ['subprojects' => Auth::user()->subprojects()->paginate(9)]);
     }
 }

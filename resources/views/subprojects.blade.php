@@ -39,6 +39,9 @@
                     </div>
                 @endforeach
         </div>
+        <div style="margin-top: 20px">
+            {{ $subprojects->links() }}
+        </div>
     @endif
     @endauth
 @endsection

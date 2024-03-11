@@ -1,7 +1,6 @@
 @extends('base')
 @section('title', $project->title )
 @section('main')
-{{--    <p><a href="{{route('project.index')}}" class="btn btn-secondary">На перечень проектов надо будет удалить</a></p>--}}
     <div style="width: 70%; margin: auto">
 
         <img src="{{ asset('storage/projects/' . $project->image) }}" alt="Изображение проекта" class="img-fluid mb-3"
@@ -83,6 +82,9 @@
                     </div>
                 </div>
             @endforeach
+        </div>
+        <div style="margin-top: 20px">
+            {{ $categories->links() }}
         </div>
     @endif
 
@@ -223,69 +225,3 @@
         }
     </script>
 @endsection
-
-
-
-
-<!--
-    Комментарии, потом надо будеть сделать норм стили
--->
-
-{{--    <div class="row" style="margin-top: 20px">--}}
-{{--        <div class="col-md-12">--}}
-{{--            <div class="panel panel-info">--}}
-{{--                <div class="panel-heading">Комментарии</div>--}}
-
-{{--                <div class="panel-body comments">--}}
-{{--                    <form action="{{ route('comment.store',  $project) }}" method="post" class="mb-3">--}}
-{{--                        @csrf--}}
-{{--                            <textarea name="content" class="form-control" placeholder="Оставьте Ваш комментарий" rows="5"></textarea>--}}
-{{--                        <br>--}}
-{{--                        <button type="submit" class="btn btn-info pull-right">Отправить</button>--}}
-{{--                    </form>--}}
-
-{{--                    @foreach($project->comments()->get() as $comment)--}}
-{{--                        <div class="clearfix"></div>--}}
-{{--                        <hr>--}}
-{{--                        <ul class="media-list">--}}
-{{--                            <li class="media">--}}
-{{--                                <div class="comment">--}}
-{{--                                    <div>--}}
-{{--                                        <a href="#" class="pull-left">--}}
-{{--                                            <img src="https://bootstraptema.ru/snippets/element/2016/comments/com-1.jpg" alt="" class="img-circle">--}}
-{{--                                        </a>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="media-body">--}}
-{{--                                        <strong class="text-success">{{$comment->user->name }}</strong>--}}
-{{--                                        <span class="text-muted">--}}
-{{--                                                <small class="text-muted">{{ $comment->created_at }}</small>--}}
-{{--                                        </span>--}}
-{{--                                        <p>--}}
-{{--                                            {{ $comment->content }}--}}
-{{--                                        </p>--}}
-{{--                                    </div>--}}
-
-{{--                                    @if(Auth::user()->id == $comment->user_id)--}}
-{{--                                        <form action="{{ route('comment.update', compact('project','comment')) }}" method="POST" class="dropdown-item">--}}
-{{--                                            @csrf--}}
-{{--                                            @method('PATCH')--}}
-{{--                                            <div class="form-group">--}}
-{{--                                                <textarea name="content" rows="4" class="form-control">{{ $comment->content }}</textarea>--}}
-{{--                                            </div>--}}
-{{--                                            <button type="submit" class="btn btn-primary">Обновить комментарий</button>--}}
-{{--                                        </form>--}}
-
-{{--                                        <form action="{{ route('comment.destroy', compact('project','comment')) }}" method="POST" class="dropdown-item">--}}
-{{--                                            @csrf--}}
-{{--                                            @method('DELETE')--}}
-{{--                                            <button type="submit" class="btn btn-danger">Удалить комментарий</button>--}}
-{{--                                        </form>--}}
-{{--                                    @endif--}}
-{{--                                </div>--}}
-{{--                            </li>--}}
-{{--                        </ul>--}}
-{{--                    @endforeach--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
