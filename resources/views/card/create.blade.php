@@ -8,10 +8,8 @@
                     <div class="card-header">Создание карточки</div>
 
                     <div class="card-body">
-                        <form method="POST"
-                              action="{{ route('card.store', ['project' => $project, 'category' => $category]) }}">
+                        <form method="POST" action="{{ route('card.store', ['project' => $project, 'category' => $category]) }}">
                             @csrf
-
                             <div class="form-group">
                                 <label for="term">Термин</label>
                                 <input type="text" name="term" id="term" class="form-control" required>

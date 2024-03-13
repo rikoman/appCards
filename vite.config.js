@@ -7,6 +7,7 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/css/card/main.css',
+                'resources/css/card/comment.css',
                 'resources/js/app.js',
             ],
             refresh: true,

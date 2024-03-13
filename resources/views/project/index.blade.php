@@ -3,7 +3,6 @@
 @section('main')
     @if (count($projects) > 0)
         <h1>Популярные проекты</h1>
-        {{--        <a href="{{ $projects->onEachSide(2)->links() }}"></a>--}}
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             @foreach($projects as $project)
                 <div class="col">
@@ -23,9 +22,7 @@
                                         @if (Auth::user()->can(['update','delete'], $project))
                                             <a href="{{ route('project.edit', ['project' => $project->id]) }}"
                                                type="button" class="btn btn-sm btn-outline-secondary">Редактировать</a>
-                                            <form
-                                                action="{{ route('project.destroy', $project->id) }}"
-                                                method="post">
+                                            <form action="{{ route('project.destroy', $project->id) }}" method="post">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-outline-secondary">Удалить
@@ -34,16 +31,14 @@
                                         @endif
                                         @if(Auth::user()->id != $project->user_id)
                                             @if(Auth::user()->subprojects->contains('id',$project->id))
-                                                <form action="{{ route('project.unsubscribed', $project) }}"
-                                                      method="POST">
+                                                <form action="{{ route('project.unsubscribed', $project) }}" method="POST">
                                                     @csrf
                                                     <button type="submit" class="btn btn-sm btn-outline-secondary">
                                                         Отписаться
                                                     </button>
                                                 </form>
                                             @else
-                                                <form action="{{ route('project.subscribed', $project) }}"
-                                                      method="POST">
+                                                <form action="{{ route('project.subscribed', $project) }}" method="POST">
                                                     @csrf
                                                     <button type="submit" class="btn btn-sm btn-outline-secondary">
                                                         Подписаться

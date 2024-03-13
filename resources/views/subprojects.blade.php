@@ -20,8 +20,7 @@
                                         <a href="{{route('project.show',['project'=>$project->id])}}" type="button" class="btn btn-sm btn-outline-secondary">Смотреть</a>
                                         @if (Auth::user()->can(['update','delete'], $project))
                                             <a href="{{ route('project.edit', ['project' => $project->id]) }}" type="button" class="btn btn-sm btn-outline-secondary">Редактировать</a>
-                                            <form
-                                                action="{{ route('project.destroy', $project->id) }}" method="post">
+                                            <form action="{{ route('project.destroy', $project->id) }}" method="post">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-outline-secondary">Удалить</button>
@@ -45,10 +44,3 @@
     @endif
     @endauth
 @endsection
-{{--<form action="{{ route('project.unsubscribed', $project) }}" method="POST">--}}
-{{--    @csrf--}}
-{{--    <button type="submit">Unsubscribe to Project</button>--}}
-{{--</form>--}}
-
-{{--<td>{{count($project->categories)}}</td>--}}
-{{--<td>{{$project->numberOfVisits}}</td>--}}

@@ -1,6 +1,6 @@
 @extends('base')
 @section('main')
-        <form action="{{ route('comment.update.cat', ['project' => $project->id, 'category' => $category->id,'comment'=>$comment->id]) }}"
+        <form action="{{ route('project.comment.update', compact('project','comment')) }}"
               method="post">
             @csrf
             @method('PATCH')

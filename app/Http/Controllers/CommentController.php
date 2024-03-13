@@ -24,7 +24,7 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Project $project, Request $request)
+    public function storeForProject(Project $project, Request $request)
     {
         $validated = $request->validate([
             self::COMMENT_VALIDATOR,
@@ -34,7 +34,7 @@ class CommentController extends Controller
         $user = Auth::user();
 
         $comment = new Comment();
-        $comment->content = $validated['content'];
+        $comment->content = $request->content;
         $comment->user_id = $user->id;
         $comment->project_id = $project->id;
 
@@ -43,7 +43,7 @@ class CommentController extends Controller
         return redirect()->back()->with('success', 'Comment created successfully!');
     }
 
-    public function storeCat(Project $project, Category $category, Request $request)
+    public function storeForCategory(Project $project, Category $category, Request $request)
     {
         $validated = $request->validate([
             self::COMMENT_VALIDATOR,
@@ -53,7 +53,7 @@ class CommentController extends Controller
         $user = Auth::user();
 
         $comment = new Comment();
-        $comment->content = $validated['content'];
+        $comment->content = $request->content;
         $comment->user_id = $user->id;
         $comment->category_id = $category->id;
 
@@ -73,7 +73,22 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,Project $project,Category $category, Comment $comment)
+    public function updateForProject(Request $request,Project $project, Comment $comment)
+    {
+        $validated = $request->validate([
+            self::COMMENT_VALIDATOR,
+            self::COMMENT_VALIDATOR_MESSAGES
+        ]);
+
+        $comment->fill([
+            'content'=>$validated['content'],
+        ]);
+        $comment->save();
+
+        return redirect()->back();
+    }
+
+    public function updateForCategory(Request $request,Project $project,Category $category, Comment $comment)
     {
         $validated = $request->validate([
             self::COMMENT_VALIDATOR,
@@ -87,31 +102,17 @@ class CommentController extends Controller
 
         return redirect()->route('category.show',compact('project','category'));
     }
-    public function updatep(Request $request,Project $project, Comment $comment)
-    {
-        $validated = $request->validate([
-            self::COMMENT_VALIDATOR,
-            self::COMMENT_VALIDATOR_MESSAGES
-        ]);
-
-        $comment->fill([
-            'content'=>$validated['content'],
-        ]);
-        $comment->save();
-
-        return redirect()->back();
-    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Project $project,Category $category, Comment $comment)
+    public function destroyForProject(Project $project,Comment $comment)
     {
         $comment->delete();
         return redirect()->back();
     }
 
-    public function destroyp(Project $project,Comment $comment)
+    public function destroyForCategory(Project $project,Category $category, Comment $comment)
     {
         $comment->delete();
         return redirect()->back();

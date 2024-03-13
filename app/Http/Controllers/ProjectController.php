@@ -62,10 +62,10 @@ class ProjectController extends Controller
         if ($request->hasFile('image')){
             $data = $request->file('image')->store('', 'projects');
         }
-
+//        dd($request);
         Auth::user()->projects()->create([
-            'title' => $validated['title'],
-            'description' => $validated['description'],
+            'title' => $request->title,
+            'description' => $request->description,
             'image' => $data,
         ]);
         return redirect()->route('project.home');

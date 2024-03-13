@@ -7,9 +7,7 @@
                 <div class="card">
                     <div class="card-header">Редактирование категории</div>
                     <div class="card-body">
-                        <form
-                            action="{{ route('category.update', ['project'=>$project->id,'category'=>$category->id]) }}"
-                            method="POST">
+                        <form action="{{ route('category.update', ['project'=>$project->id,'category'=>$category->id]) }}" method="POST">
                             @csrf
                             @method('PATCH')
                             <div class="form-group">

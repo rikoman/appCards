@@ -89,14 +89,14 @@
     @endif
 
     <div class="comments-section" style="margin-top: 30px">
-        <!-- Форма для добавления нового комментария -->
-        <form method="POST"
-              action="{{ route('comment.store', ['project' => $project->id]) }}"
-        >
-            @csrf
-            <textarea name="content" placeholder="Напишите сообщение" rows="3"></textarea>
-            <button type="submit">Отправить</button>
-        </form>
+        @auth
+            <!-- Форма для добавления нового комментария -->
+            <form method="POST" action="{{ route('project.comment.store', ['project' => $project->id]) }}">
+                @csrf
+                <textarea name="content" placeholder="Напишите сообщение" rows="3"></textarea>
+                <button type="submit">Отправить</button>
+            </form>
+        @endauth
 
         <!-- Список комментариев -->
         <div class="comments-list">
@@ -113,8 +113,8 @@
                                     #
                                 </button>
                                 <div class="dropdown-menu hidden">
-                                    <a href="{{ route('comment.edit',compact('project','comment')) }}">Редактировать</a>
-                                    <form method="POST" action="{{ route('comment.destroy', compact('project','comment')) }}">
+                                    <a href="{{ route('project.comment.edit',compact('project','comment')) }}">Редактировать</a>
+                                    <form method="POST" action="{{ route('project.comment.destroy', compact('project','comment')) }}">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit">Удалить</button>

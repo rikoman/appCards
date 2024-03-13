@@ -8,14 +8,12 @@
                     <div class="card-header">Редактирование карточки</div>
 
                     <div class="card-body">
-                        <form action="{{ route('card.update', ['project'=>$project->id,'category'=>$category->id,'card'=>$card->id]) }}"
-                              method="POST">
+                        <form action="{{ route('card.update', ['project'=>$project->id,'category'=>$category->id,'card'=>$card->id]) }}" method="POST">
                             @csrf
                             @method('PATCH')
                             <div class="form-group">
                                 <label for="txtTerm">Термин</label>
-                                <input name="term" id="txtTerm" class="form-control @error('term') is-invalid @enderror"
-                                       value="{{ old('term', $card->term) }}">
+                                <input name="term" id="txtTerm" class="form-control @error('term') is-invalid @enderror" value="{{ old('term', $card->term) }}">
                                 @error('term')
                                 <span class="invalid-feedback">
                                     <strong>{{ $message }}</strong>
@@ -24,8 +22,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="txtDefinition">Определение</label>
-                                <input name="definition" id="txtDefinition" class="form-control @error('definition') is-invalid @enderror"
-                                       value="{{ old('definition', $card->definition) }}">
+                                <input name="definition" id="txtDefinition" class="form-control @error('definition') is-invalid @enderror" value="{{ old('definition', $card->definition) }}">
                                 @error('definition')
                                 <span class="invalid-feedback">
                                     <strong>{{ $message }}</strong>

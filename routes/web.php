@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CardController;
+use App\Http\Controllers\CardsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
@@ -41,7 +42,7 @@ require __DIR__ . '/auth.php';
  * model project
  */
 Route::prefix('/app/projects')->group(function () {
-    Route::get('/', [ProjectController::class, 'index'])->name('project.index');
+    Route::get('/', [ProjectController::class,'index'])->name('project.index');
     Route::get('/create', [ProjectController::class, 'create'])->name('project.create')->middleware('auth');
     Route::post('/', [ProjectController::class, 'store'])->name('project.store')->middleware('auth');
     Route::get('/home', [ProjectController::class, 'home'])->name('project.home')->middleware('auth');
@@ -50,12 +51,13 @@ Route::prefix('/app/projects')->group(function () {
     Route::prefix('/{project}')->group(function () {
         Route::get('/', [ProjectController::class, 'show'])->name('project.show');
 
-        Route::post('/sub', [ProjectController::class, 'subscribed'])->name('project.subscribed');
-        Route::post('/unsub', [ProjectController::class, 'unsubscribed'])->name('project.unsubscribed');
-
         Route::get('/edit', [ProjectController::class, 'edit'])->name('project.edit')->middleware(['auth', 'can:update,project']);
         Route::patch('/', [ProjectController::class, 'update'])->name('project.update')->middleware(['auth', 'can:update,project']);
         Route::delete('/', [ProjectController::class, 'destroy'])->name('project.destroy')->middleware(['auth', 'can:delete,project']);
+
+        Route::post('/sub', [ProjectController::class, 'subscribed'])->name('project.subscribed');
+        Route::post('/unsub', [ProjectController::class, 'unsubscribed'])->name('project.unsubscribed');
+
     });
 });
 
@@ -89,20 +91,29 @@ Route::prefix('/app/projects/{project}/categories/{category}/cards')->group(func
 });
 
 /**
- * model comment
+ * model comment for project
  */
 Route::prefix('/app/projects/{project}/comments')->group(function () {
-    Route::post('/', [CommentController::class, 'store'])->name('comment.store');
-    Route::get('/{comment}/edit', [CommentController::class, 'edit'])->name('comment.edit');
-    Route::patch('/{comment}', [CommentController::class, 'updatep'])->name('comment.update');
-    Route::delete('/{comment}', [CommentController::class, 'destroyp'])->name('comment.destroy');
-
-
+    Route::post('/', [CommentController::class, 'storeForProject'])->name('project.comment.store');
+    Route::get('/{comment}/edit', [CommentController::class, 'edit'])->name('project.comment.edit');
+    Route::patch('/{comment}', [CommentController::class, 'updateForProject'])->name('project.comment.update');
+    Route::delete('/{comment}', [CommentController::class, 'destroyForProject'])->name('project.comment.destroy');
 });
 
+/**
+ * model comment for category
+ */
 Route::prefix('/app/projects/{project}/categories/{category}/comments')->group(function () {
-    Route::post('/', [CommentController::class, 'storeCat'])->name('comment.storecat');
-    Route::get('/{comment}/edit', [CommentController::class, 'edit'])->name('comment.edit.cat');
-    Route::patch('/{comment}', [CommentController::class, 'update'])->name('comment.update.cat');
-    Route::delete('/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy.cat');
+    Route::post('/', [CommentController::class, 'storeForCategory'])->name('category.comment.store');
+    Route::get('/{comment}/edit', [CommentController::class, 'edit'])->name('category.comment.edit');
+    Route::patch('/{comment}', [CommentController::class, 'updateForCategory'])->name('category.comment.update');
+    Route::delete('/{comment}', [CommentController::class, 'destroyForCategory'])->name('category.comment.destroy');
+});
+
+/**
+ * export and import model card
+ */
+Route::prefix('/app/projects/{project}/categories/{category}/cards')->group(function (){
+    Route::get('/export', [CardsController::class, 'export'])->name('card.export');
+    Route::post('/import', [CardsController::class, 'import'])->name('card.import');
 });
