@@ -1,15 +1,17 @@
 @extends('base')
-@section('title', 'Добавление проекта :: Мои проекты')
+@section('title')
+    {{__('Добавление проекта')}}
+@endsection
 @section('main')
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Создание проекта</div>
+                <div class="card-header">{{__('Создание проекта')}}</div>
                 <div class="card-body">
                     <form action="{{ route('project.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
-                            <label for="txtTitle">Название</label>
+                            <label for="txtTitle">{{__('Название')}}</label>
                             <input name="title" id="txtTitle" class="form-control @error('title') is-invalid @enderror"
                                    value="{{ old('title') }}">
                             @error('title')
@@ -19,7 +21,7 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="txtDescription">Описание</label>
+                            <label for="txtDescription">{{__('Описание')}}</label>
                             <textarea name="description" id="txtDescription"
                                       class="form-control @error('description') is-invalid @enderror"
                                       row="3">{{ old('description') }}</textarea>
@@ -36,7 +38,7 @@
                             </span>
                         @enderror
 
-                        <input type="submit" class="btn btn-primary" value="Создать">
+                        <input type="submit" class="btn btn-primary" value="{{__('Создать')}}">
                     </form>
                 </div>
             </div>

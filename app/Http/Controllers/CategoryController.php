@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\Auth;
 class CategoryController extends Controller
 {
     private const CATEGORY_VALIDATOR = [
-        'title'=>'required|min:2|max:50',
-        'description'=>'nullable|min:10|max:150',
+        'title' => 'required|min:2|max:50',
+        'description' => 'nullable|min:10|max:150',
     ];
 
     private const CATEGORY_ERROR_MESSAGES = [
-        'required'=>'Заполните поле',
-        'max'=>'Значение не должно быть длинее :max символов',
-        'min'=>'Значение не должно быть короче :min символов'
+        'required' => 'Заполните поле',
+        'max' => 'Значение не должно быть длинее :max символов',
+        'min' => 'Значение не должно быть короче :min символов'
     ];
 
     /**
@@ -36,7 +36,7 @@ class CategoryController extends Controller
         );
 
         $project->categories()->create([
-            'title'=>$validated['title'],
+            'title' => $validated['title'],
             'description' => $validated['description']
         ]);
 
@@ -46,24 +46,24 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Project $project,Category $category)
+    public function show(Project $project, Category $category)
     {
         $cards = $category->cards()->get();
-        return view('category.show', compact('category', 'project','cards'));
+        return view('category.show', compact( 'project', 'category','cards'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Project $project, Category $category)
+    public function edit($project, Category $category)
     {
-        return view('category.edit',compact('category','project'));
+        return view('category.edit', compact('project','category'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,Project $project, Category $category)
+    public function update(Request $request, $projectId, Category $category)
     {
         $validated = $request->validate(
             self::CATEGORY_VALIDATOR,
@@ -71,21 +71,21 @@ class CategoryController extends Controller
         );
 
         $category->fill([
-            'title'=>$validated['title'],
-            'description'=>$validated['description'],
+            'title' => $validated['title'],
+            'description' => $validated['description'],
         ]);
 
         $category->save();
 
-        return redirect()->route('project.show', $project);
+        return redirect()->route('project.show', $projectId);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Project $project,Category $category)
+    public function destroy($projectId, Category $category)
     {
         $category->delete();
-        return redirect()->route('project.show', $project);
+        return redirect()->route('project.show', $projectId);
     }
 }

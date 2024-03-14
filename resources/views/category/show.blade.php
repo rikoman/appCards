@@ -28,7 +28,7 @@
                 <div>
                     <p><a style="width: 100%; margin-bottom: 10px" type="button"
                           href="{{route('card.create',compact('category','project'))}}"
-                          class="btn btn-outline-success btn-lg btn-block">Создать карточку</a></p>
+                          class="btn btn-outline-success btn-lg btn-block">{{__('Создать карточку')}}</a></p>
                 </div>
             @endif
         @endauth
@@ -46,13 +46,13 @@
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <div>
                                             <a class="btn btn-outline-success"
-                                               href="{{ route('card.edit', ['project' => $project->id, 'category' => $category->id, 'card' => $card->id]) }}">Редактировать</a>
+                                               href="{{ route('card.edit', ['project' => $project->id, 'category' => $category->id, 'card' => $card->id]) }}">{{__('Редактировать')}}</a>
                                         </div>
                                         <div>
                                             <form action="{{ route('card.destroy', ['project' => $project->id, 'category' => $category->id, 'card' => $card->id]) }}" method="post">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-outline-danger">Удалить</button>
+                                                <button type="submit" class="btn btn-outline-danger">{{__('Удалить')}}</button>
                                             </form>
                                         </div>
                                     </div>
@@ -67,26 +67,32 @@
 
     </div>
 
-    <form action="{{route('card.export',compact('project','category'))}}" method="get">
-        <button type="submit">скачать excel</button>
-    </form>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        @auth
+            <form action="{{route('card.export',compact('project','category'))}}" method="get">
+                <button type="submit" class="btn btn-primary">{{__('скачать excel')}}</button>
+            </form>
 
-    <form action="{{ route('card.import', compact('project','category')) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <div class="form-group">
-            <label for="import_file">Choose Excel File to Import:</label>
-            <input type="file" name="import_file" id="import_file" class="form-control-file">
-        </div>
-        <button type="submit" class="btn btn-primary">Import</button>
-    </form>
+            @if(Auth::user()->can(['update'], $project))
+                <form action="{{ route('card.import', compact('project','category')) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <label for="import_file">{{__('Choose Excel File to Import')}}:</label>
+                        <input type="file" name="import_file" id="import_file" class="form-control-file">
+                    </div>
+                    <button type="submit" class="btn btn-primary">{{__('Import')}}</button>
+                </form>
+            @endif
+        @endauth
+    </div>
 
     <div class="comments-section" style="margin-top: 30px">
 
         @auth
-            <form method="POST" action="{{ route('category.comment.store', ['project' => $project->id, 'category' => $category->id]) }}">
+            <form method="POST" action="{{ route('category.comment.store', compact('project','category')) }}">
                 @csrf
-                <textarea name="content" placeholder="Напишите сообщение" rows="3"></textarea>
-                <button type="submit">Отправить</button>
+                <textarea name="content" placeholder="{{__('Напишите сообщение')}}" rows="3"></textarea>
+                <button type="submit">{{__('Отправить')}}</button>
             </form>
         @endauth
 
@@ -105,11 +111,11 @@
                                     #
                                 </button>
                                 <div class="dropdown-menu hidden" >
-                                    <a href="{{ route('category.comment.edit',compact('project','category','comment')) }}">Редактировать</a>
+                                    <a href="{{ route('category.comment.edit',compact('project','category','comment')) }}">{{__('Редактировать')}}</a>
                                     <form method="POST" action="{{ route('category.comment.destroy', compact('project','category','comment')) }}">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit">Удалить</button>
+                                        <button type="submit">{{__('Удалить')}}</button>
                                     </form>
                                 </div>
                             </div>

@@ -53,7 +53,7 @@ class CardController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Project $project, Category $category, Card $card)
+    public function update(Request $request,$project,$category, Card $card)
     {
         $validated = $request->validate(
             self::CARD_VALIDATOR,
@@ -73,9 +73,9 @@ class CardController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Project $project, Category $category, Card $card)
+    public function destroy($projectId, $categoryId, Card $card)
     {
         $card->delete();
-        return redirect()->route('category.show', compact('project', 'category'));
+        return redirect()->back();
     }
 }

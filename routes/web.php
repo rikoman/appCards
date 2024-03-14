@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SearchController;
 use App\Models\Card;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,7 @@ Route::prefix('/app/projects')->group(function () {
     Route::post('/', [ProjectController::class, 'store'])->name('project.store')->middleware('auth');
     Route::get('/home', [ProjectController::class, 'home'])->name('project.home')->middleware('auth');
     Route::get('/sub', [ProjectController::class, 'subProjects'])->name('project.sub')->middleware('auth');
+    Route::get('/search', [SearchController::class, 'search'])->name('search');
 
     Route::prefix('/{project}')->group(function () {
         Route::get('/', [ProjectController::class, 'show'])->name('project.show');

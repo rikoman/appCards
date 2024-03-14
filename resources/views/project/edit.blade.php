@@ -1,17 +1,19 @@
 @extends('base')
-@section('title', 'Правка проекта :: Мои проекты')
+@section('title')
+    {{__( 'Правка проекта')}}
+@endsection
 @section('main')
 
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Редактирование проекта</div>
+                <div class="card-header">{{__('Редактирование проекта')}}</div>
                 <div class="card-body">
                     <form action="{{ route('project.update', ['project' => $project->id]) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
                         <div class="form-group">
-                            <label for="txtTitle">Товар</label>
+                            <label for="txtTitle">{{__('Название')}}</label>
                             <input name="title" id="txtTitle" class="form-control @error('title') is-invalid @enderror"
                                    value="{{ old('title', $project->title) }}">
                             @error('title')
@@ -21,7 +23,7 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="txtDescription">Описание</label>
+                            <label for="txtDescription">{{__('Описание')}}</label>
                             <textarea name="description" id="txtDescription"
                                       class="form-control @error('description') is-invalid @enderror"
                                       row="3">{{ old('description', $project->description) }}</textarea>
@@ -38,7 +40,7 @@
                             </span>
                         @enderror
 
-                        <input type="submit" class="btn btn-primary" value="Сохранить">
+                        <input type="submit" class="btn btn-primary" value="{{__('Сохранить')}}">
                     </form>
                 </div>
             </div>

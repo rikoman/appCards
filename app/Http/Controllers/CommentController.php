@@ -24,7 +24,7 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function storeForProject(Project $project, Request $request)
+    public function storeForProject($projectId, Request $request)
     {
         $validated = $request->validate([
             self::COMMENT_VALIDATOR,
@@ -36,14 +36,14 @@ class CommentController extends Controller
         $comment = new Comment();
         $comment->content = $request->content;
         $comment->user_id = $user->id;
-        $comment->project_id = $project->id;
+        $comment->project_id = $projectId;
 
         $comment->save();
 
         return redirect()->back()->with('success', 'Comment created successfully!');
     }
 
-    public function storeForCategory(Project $project, Category $category, Request $request)
+    public function storeForCategory($projectId,$categoryId, Request $request)
     {
         $validated = $request->validate([
             self::COMMENT_VALIDATOR,
@@ -55,7 +55,7 @@ class CommentController extends Controller
         $comment = new Comment();
         $comment->content = $request->content;
         $comment->user_id = $user->id;
-        $comment->category_id = $category->id;
+        $comment->category_id = $categoryId;
 
         $comment->save();
 
@@ -65,6 +65,7 @@ class CommentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+//    надо будет сделать
     public function edit(Project $project,Category $category, Comment $comment)
     {
         return view('comment.edit',compact('project','category','comment'));
@@ -73,7 +74,7 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function updateForProject(Request $request,Project $project, Comment $comment)
+    public function updateForProject(Request $request,$projectId, Comment $comment)
     {
         $validated = $request->validate([
             self::COMMENT_VALIDATOR,
@@ -81,14 +82,14 @@ class CommentController extends Controller
         ]);
 
         $comment->fill([
-            'content'=>$validated['content'],
+            'content'=>$request->content,
         ]);
         $comment->save();
 
-        return redirect()->back();
+        return redirect()->route('project.show',$projectId);
     }
 
-    public function updateForCategory(Request $request,Project $project,Category $category, Comment $comment)
+    public function updateForCategory(Request $request,$projectId,$categoryId, Comment $comment)
     {
         $validated = $request->validate([
             self::COMMENT_VALIDATOR,
@@ -100,19 +101,19 @@ class CommentController extends Controller
         ]);
         $comment->save();
 
-        return redirect()->route('category.show',compact('project','category'));
+        return redirect()->route('category.show',compact('projectId','categoryId'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroyForProject(Project $project,Comment $comment)
+    public function destroyForProject($project,Comment $comment)
     {
         $comment->delete();
         return redirect()->back();
     }
 
-    public function destroyForCategory(Project $project,Category $category, Comment $comment)
+    public function destroyForCategory($projectId,$categoryId, Comment $comment)
     {
         $comment->delete();
         return redirect()->back();
