@@ -57,8 +57,8 @@ Route::prefix('/app/projects')->group(function () {
         Route::patch('/', [ProjectController::class, 'update'])->name('project.update')->middleware(['auth', 'can:update,project']);
         Route::delete('/', [ProjectController::class, 'destroy'])->name('project.destroy')->middleware(['auth', 'can:delete,project']);
 
-        Route::post('/sub', [ProjectController::class, 'subscribed'])->name('project.subscribed');
-        Route::post('/unsub', [ProjectController::class, 'unsubscribed'])->name('project.unsubscribed');
+        Route::post('/sub', [ProjectController::class, 'subscribed'])->name('project.subscribed')->middleware('auth');
+        Route::post('/unsub', [ProjectController::class, 'unsubscribed'])->name('project.unsubscribed')->middleware('auth');
 
     });
 });
