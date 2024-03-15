@@ -1,48 +1,12 @@
 @extends('base')
 @section('title')
-    {{__('Добавление проекта')}}
+    {{__('Создание проекта')}}
 @endsection
 @section('main')
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{__('Создание проекта')}}</div>
-                <div class="card-body">
-                    <form action="{{ route('project.store') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="form-group">
-                            <label for="txtTitle">{{__('Название')}}</label>
-                            <input name="title" id="txtTitle" class="form-control @error('title') is-invalid @enderror"
-                                   value="{{ old('title') }}">
-                            @error('title')
-                            <span class="invalid-feedback">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="txtDescription">{{__('Описание')}}</label>
-                            <textarea name="description" id="txtDescription"
-                                      class="form-control @error('description') is-invalid @enderror"
-                                      row="3">{{ old('description') }}</textarea>
-                            @error('description')
-                            <span class="invalid-feedback">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <input type="file" name="image" class="@error('image') is-invalid @enderror" accept="image/png, image/jpeg"/>
-                        @error('image')
-                        <span class="invalid-feedback">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-
-                        <input type="submit" class="btn btn-primary" value="{{__('Создать')}}">
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-forms.base :header="'Создание проекта'" :route="route('project.store')" :textSubmit="'Создать'">
+        <x-forms.input :title="'Название'" :param="'title'" :paramValue="old('title')"/>
+        <x-forms.area :title="'Описание'" :param="'description'" :paramValue="old('description')"/>
+        <x-forms.inputImg :param="'image'"/>
+    </x-forms.base>
 @endsection
 

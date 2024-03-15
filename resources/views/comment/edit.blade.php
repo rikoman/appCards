@@ -3,11 +3,8 @@
     {{__('Редактирование комментария')}}
 @endsection
 @section('main')
-        <form action="{{ route('project.comment.update', compact('project','comment')) }}"
-              method="post">
-            @csrf
-            @method('PATCH')
-            <textarea name="content" rows="4" cols="50"></textarea>
-            <button type="submit">{{__('Add Comment')}}</button>
-        </form>
+    <x-forms.base :header="'Редактирование комментария'" :route="route('project.comment.update', compact('project','comment'))" :textSubmit="'Сохранить'">
+        @method('PATCH')
+        <x-forms.area :title="'Сообщение'" :param="'content'" :paramValue="old('content',$comment->content)"/>
+    </x-forms.base>
 @endsection

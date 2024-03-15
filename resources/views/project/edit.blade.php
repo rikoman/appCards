@@ -3,47 +3,10 @@
     {{__( 'Правка проекта')}}
 @endsection
 @section('main')
-
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{__('Редактирование проекта')}}</div>
-                <div class="card-body">
-                    <form action="{{ route('project.update', ['project' => $project->id]) }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        @method('PATCH')
-                        <div class="form-group">
-                            <label for="txtTitle">{{__('Название')}}</label>
-                            <input name="title" id="txtTitle" class="form-control @error('title') is-invalid @enderror"
-                                   value="{{ old('title', $project->title) }}">
-                            @error('title')
-                            <span class="invalid-feedback">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="txtDescription">{{__('Описание')}}</label>
-                            <textarea name="description" id="txtDescription"
-                                      class="form-control @error('description') is-invalid @enderror"
-                                      row="3">{{ old('description', $project->description) }}</textarea>
-                            @error('description')
-                            <span class="invalid-feedback">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <input type="file" name="image" class="@error('image') is-invalid @enderror accept="image/png, image/jpeg"/>
-                        @error('image')
-                        <span class="invalid-feedback">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-
-                        <input type="submit" class="btn btn-primary" value="{{__('Сохранить')}}">
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-forms.base :header="'Редактирование проекта'" :route="route('project.update',compact('project'))" :textSubmit="'Сохранить'">
+        @method('PATCH')
+        <x-forms.input :title="'Название'" :param="'title'" :paramValue="old('title', $project->title)"/>
+        <x-forms.area :title="'Описание'" :param="'description'" :paramValue="old('description', $project->description)"/>
+        <x-forms.inputImg :param="'image'"/>
+    </x-forms.base>
 @endsection
