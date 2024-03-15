@@ -1,4 +1,4 @@
-@extends('base')
+@extends('layouts.base')
 @section('title')
     {{__( 'Правка проекта')}}
 @endsection
@@ -7,6 +7,6 @@
         @method('PATCH')
         <x-forms.input :title="'Название'" :param="'title'" :paramValue="old('title', $project->title)"/>
         <x-forms.area :title="'Описание'" :param="'description'" :paramValue="old('description', $project->description)"/>
-        <x-forms.inputImg :param="'image'"/>
+        <x-forms.input_img :param="'image'"/>
     </x-forms.base>
 @endsection

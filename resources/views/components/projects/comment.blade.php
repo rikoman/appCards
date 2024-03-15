@@ -1,6 +1,6 @@
 <div class="comments-section" style="margin-top: 30px">
     @auth
-        <form method="POST" action="{{ route('project.comment.store', $project) }}">
+        <form method="POST" action="{{ $routeCreate }}">
             @csrf
             <textarea name="content" placeholder="Напишите сообщение" rows="3"></textarea>
             <button type="submit">{{__('Отправить')}}</button>
@@ -8,7 +8,7 @@
     @endauth
 
     <div class="comments-list">
-        @foreach ($project->comments()->get() as $comment)
+        @foreach ($comments as $comment)
             <div class="comment">
                 <div class="user-info">
                     <div>
@@ -21,9 +21,20 @@
                                 #
                             </button>
                             <div class="dropdown-menu hidden">
-                                <a href="{{ route('project.comment.edit',compact('project','comment')) }}">{{__('Редактировать')}}</a>
+                                <a
+                                    @if(isset($category))
+                                        href="{{ route($routeUpdate,compact('project','category','comment')) }}"
+                                    @else
+                                        href="{{ route($routeUpdate,compact('project','comment')) }}"
+                                    @endif
+
+                                >{{__('Редактировать')}}</a>
                                 <form method="POST"
-                                      action="{{ route('project.comment.destroy', compact('project','comment')) }}">
+                                      @if(isset($category))
+                                          action="{{ route($routeDelete,compact('project','category','comment')) }}"
+                                      @else
+                                          action="{{ route($routeDelete,compact('project','comment')) }}"
+                                    @endif>
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit">
@@ -39,13 +50,14 @@
         @endforeach
     </div>
 </div>
-<script>
-    function toggleMenu(button) {
-        var menu = button.nextElementSibling;
-        if (menu.style.display === 'block') {
-            menu.style.display = 'none';
-        } else {
-            menu.style.display = 'block';
+    <script>
+        function toggleMenu(button) {
+            var menu = button.nextElementSibling;
+            if (menu.style.display === 'block') {
+                menu.style.display = 'none';
+            } else {
+                menu.style.display = 'block';
+            }
         }
-    }
-</script>
+
+    </script>

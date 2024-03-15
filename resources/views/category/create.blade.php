@@ -1,4 +1,4 @@
-@extends('base')
+@extends('layouts.base')
 @section('title')
     {{__('Добавление категории')}}
 @endsection

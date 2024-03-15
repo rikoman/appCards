@@ -13,6 +13,6 @@ class SearchController extends Controller
 
         $results = Project::where('title', 'like', "%$query%")->get();
 
-        return view('search_results', compact('results'));
+        return view('project.search_projects', compact('results'));
     }
 }

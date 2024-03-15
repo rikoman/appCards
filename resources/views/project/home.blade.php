@@ -1,4 +1,4 @@
-@extends('base')
+@extends('layouts.base')
 @section('title')
     {{__('Мои проекты')}}
 @endsection
@@ -14,7 +14,7 @@
                     <x-projects.project :project="$project" />
                 @endforeach
             </div>
-            <div style="margin-top: 20px">
+            <div class="mt-3">
                 {{ $projects->links() }}
             </div>
         @endif

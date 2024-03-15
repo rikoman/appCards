@@ -26,10 +26,6 @@ Route::get('/', function () {
     return redirect()->route('project.index');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -46,13 +42,15 @@ Route::prefix('/app/projects')->group(function () {
     Route::get('/', [ProjectController::class,'index'])->name('project.index');
     Route::get('/create', [ProjectController::class, 'create'])->name('project.create')->middleware('auth');
     Route::post('/', [ProjectController::class, 'store'])->name('project.store')->middleware('auth');
+
     Route::get('/home', [ProjectController::class, 'home'])->name('project.home')->middleware('auth');
+
     Route::get('/sub', [ProjectController::class, 'subProjects'])->name('project.sub')->middleware('auth');
+
     Route::get('/search', [SearchController::class, 'search'])->name('search');
 
     Route::prefix('/{project}')->group(function () {
         Route::get('/', [ProjectController::class, 'show'])->name('project.show');
-
         Route::get('/edit', [ProjectController::class, 'edit'])->name('project.edit')->middleware(['auth', 'can:update,project']);
         Route::patch('/', [ProjectController::class, 'update'])->name('project.update')->middleware(['auth', 'can:update,project']);
         Route::delete('/', [ProjectController::class, 'destroy'])->name('project.destroy')->middleware(['auth', 'can:delete,project']);

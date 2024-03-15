@@ -1,4 +1,4 @@
-@extends('base')
+@extends('layouts.base')
 @section('title', $category->title );
 @section('main')
     <div>
@@ -41,7 +41,7 @@
                         <td><h4>{{ $card->term}}</h4></td>
                         <td><h4>{{ $card->definition }}</h4></td>
                         @auth
-                            @if(Auth::user()->can(['update'], $project))
+                            @if(Auth::user()->can(['update','delete'], $card))
                                 <td>
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <div>
@@ -73,7 +73,7 @@
                 <button type="submit" class="btn btn-primary">{{__('скачать excel')}}</button>
             </form>
 
-            @if(Auth::user()->can(['update'], $project))
+            @if(Auth::user()->can(['update'], $category))
                 <form action="{{ route('card.import', compact('project','category')) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
@@ -86,47 +86,15 @@
         @endauth
     </div>
 
-    <div class="comments-section" style="margin-top: 30px">
+    <x-projects.comment
+        :comments="$category->comments()->get()"
+        :routeCreate="route('category.comment.store', [$project , $category])"
+        :routeUpdate="'category.comment.edit'"
+        :routeDelete="'category.comment.destroy'"
+        :project="$project"
+        :category="$category"
 
-        @auth
-            <form method="POST" action="{{ route('category.comment.store', compact('project','category')) }}">
-                @csrf
-                <textarea name="content" placeholder="{{__('Напишите сообщение')}}" rows="3"></textarea>
-                <button type="submit">{{__('Отправить')}}</button>
-            </form>
-        @endauth
-
-        <div class="comments-list">
-            @foreach ($category->comments()->get() as $comment)
-                <div class="comment">
-                    <div class="user-info">
-                        <div>
-                            <span>{{ $comment->user->name }}</span>
-                            <small>{{ $comment->created_at->format('j M Y, g:i a') }}</small>
-                        </div>
-
-                        @if ($comment->user == auth()->user())
-                            <div class="dropdown">
-                                <button onclick="toggleMenu(this)">
-                                    #
-                                </button>
-                                <div class="dropdown-menu hidden" >
-                                    <a href="{{ route('category.comment.edit',compact('project','category','comment')) }}">{{__('Редактировать')}}</a>
-                                    <form method="POST" action="{{ route('category.comment.destroy', compact('project','category','comment')) }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit">{{__('Удалить')}}</button>
-                                    </form>
-                                </div>
-                            </div>
-                        @endif
-
-                    </div>
-                    <p>{{ $comment->content }}</p>
-                </div>
-            @endforeach
-        </div>
-    </div>
+    />
     <script>
         function toggleCard(card) {
             var cardText = card.querySelector('.card-text');
@@ -138,15 +106,6 @@
                 cardText.style.display = "none";
                 cardTitle.style.display = "block";
             }
-        }
-
-            function toggleMenu(button) {
-            var menu = button.nextElementSibling;
-            if (menu.style.display === 'block') {
-            menu.style.display = 'none';
-        } else {
-            menu.style.display = 'block';
-        }
         }
 
         var slideIndex = 1;
@@ -179,6 +138,5 @@
             slides[slideIndex - 1].style.display = "block";
             dots[slideIndex - 1].className += " active";
         }
-
     </script>
 @endsection

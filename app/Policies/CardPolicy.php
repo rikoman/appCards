@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\card;
-use Illuminate\Auth\Access\Response;
 
 class CardPolicy
 {
@@ -28,9 +27,9 @@ class CardPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user,Project $project): bool
+    public function create(User $user, Project $project): bool
     {
-        return $user->id ===  $project->user_id;
+        return $user->id === $project->user_id;
     }
 
     /**
@@ -46,7 +45,7 @@ class CardPolicy
      */
     public function delete(User $user, card $card): bool
     {
-        return $this->update($user,$card);
+        return $this->update($user, $card);
     }
 
     /**

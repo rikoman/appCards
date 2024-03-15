@@ -1,4 +1,4 @@
-@extends('base')
+@extends('layouts.base')
 @section('title', $project->title )
 @section('main')
     @vite('resources/css/card/comment.css')
@@ -55,7 +55,7 @@
                                     <a href="{{route('category.show',compact('project','category'))}}" type="button"
                                        class="btn btn-sm btn-outline-secondary">{{__('Смотреть')}}</a>
                                     @auth
-                                        @if (Auth::user()->can(['update','delete'], $project))
+                                        @if (Auth::user()->can(['update','delete'], $category))
 
                                             <a href="{{ route('category.edit', compact('project','category')) }}"
                                                type="button" class="btn btn-sm btn-outline-secondary">{{__('Редактировать')}}</a>
@@ -83,5 +83,11 @@
             {{ $categories->links() }}
         </div>
     @endif
-    <x-projects.comment :project="$project"/>
+    <x-projects.comment
+        :comments="$project->comments()->get()"
+        :routeCreate="route('project.comment.store', $project)"
+        :routeUpdate="'project.comment.edit'"
+        :routeDelete="'project.comment.destroy'"
+        :project="$project"
+    />
 @endsection

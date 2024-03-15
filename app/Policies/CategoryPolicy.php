@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\category;
-use Illuminate\Auth\Access\Response;
 
 class CategoryPolicy
 {
@@ -36,7 +35,7 @@ class CategoryPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, category $category): bool
+    public function update(User $user, Category $category): bool
     {
         return $user->id === $category->project->user_id;
     }
@@ -44,9 +43,9 @@ class CategoryPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, category $category): bool
+    public function delete(User $user, Category $category): bool
     {
-        return $this->update($user,$category);
+        return $this->update($user, $category);
     }
 
     /**

@@ -1,4 +1,4 @@
-@extends('base')
+@extends('layouts.base')
 @section('title')
     {{__('Мои подписки')}}
 @endsection
@@ -11,7 +11,7 @@
                     <x-projects.project :project="$project"/>
                 @endforeach
         </div>
-        <div style="margin-top: 20px">
+        <div class="mt-3">
             {{ $subprojects->links() }}
         </div>
     @endif
