@@ -3,7 +3,6 @@
 @section('main')
     <div>
         @vite('resources/css/card/main.css')
-        @vite('resources/css/card/comment.css')
         @if(count($cards)>0)
             <div class="slideshow-container">
                 @foreach($cards as $key => $card)
@@ -21,50 +20,65 @@
                 <a class="next" onclick="plusSlides(1)">❯</a>
             </div>
         @endif
-        <br>
 
         @auth
             @if(Auth::user()->can(['update'], $project))
-                <div>
-                    <p><a style="width: 100%; margin-bottom: 10px" type="button"
-                          href="{{route('card.create',compact('category','project'))}}"
-                          class="btn btn-outline-success btn-lg btn-block">{{__('Создать карточку')}}</a></p>
+                <div class="mt-3">
+                    <a style="width: 100%; margin-bottom: 10px" type="button"
+                       href="{{route('card.create',compact('category','project'))}}"
+                       class="btn btn-outline-success btn-lg btn-block">{{__('Создать карточку')}}</a>
                 </div>
             @endif
         @endauth
-
         @if(count($cards) > 0)
-            <table class="table">
-                <tbody>
-                @foreach ($cards as $card)
-                    <tr>
-                        <td><h4>{{ $card->term}}</h4></td>
-                        <td><h4>{{ $card->definition }}</h4></td>
-                        @auth
-                            @if(Auth::user()->can(['update','delete'], $card))
-                                <td>
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <div>
-                                            <a class="btn btn-outline-success"
-                                               href="{{ route('card.edit', ['project' => $project->id, 'category' => $category->id, 'card' => $card->id]) }}">{{__('Редактировать')}}</a>
-                                        </div>
-                                        <div>
-                                            <form action="{{ route('card.destroy', ['project' => $project->id, 'category' => $category->id, 'card' => $card->id]) }}" method="post">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-outline-danger">{{__('Удалить')}}</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </td>
-                            @endif
-                        @endauth
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
+            <div class="accordion mt-3 mb-3" id="accordionExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Набор карточек
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                         data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <table class="table">
+                                <tbody>
+                                @foreach ($cards as $card)
+                                    <tr>
+                                        <td><h4>{{ $card->term}}</h4></td>
+                                        <td><h4>{{ $card->definition }}</h4></td>
+                                        @auth
+                                            @if(Auth::user()->can(['update','delete'], $card))
+                                                <td>
+                                                    <div class="d-flex justify-content-between align-items-center ">
+                                                        <div>
+                                                            <a class="btn btn-outline-success"
+                                                               href="{{ route('card.edit', ['project' => $project->id, 'category' => $category->id, 'card' => $card->id]) }}">{{__('Редактировать')}}</a>
+                                                        </div>
+                                                        <div>
+                                                            <form
+                                                                action="{{ route('card.destroy', ['project' => $project->id, 'category' => $category->id, 'card' => $card->id]) }}"
+                                                                method="post">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit"
+                                                                        class="btn btn-outline-danger">{{__('Удалить')}}</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            @endif
+                                        @endauth
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         @endif
-
     </div>
 
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -74,7 +88,9 @@
             </form>
 
             @if(Auth::user()->can(['update'], $category))
-                <form action="{{ route('card.import', compact('project','category')) }}" method="POST" enctype="multipart/form-data">
+
+                <form action="{{ route('card.import', compact('project','category')) }}" method="POST"
+                      enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label for="import_file">{{__('Choose Excel File to Import')}}:</label>

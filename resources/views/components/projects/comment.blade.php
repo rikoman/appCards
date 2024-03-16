@@ -1,27 +1,32 @@
-<div class="comments-section" style="margin-top: 30px">
+<div>
     @auth
-        <form method="POST" action="{{ $routeCreate }}">
-            @csrf
-            <textarea name="content" placeholder="Напишите сообщение" rows="3"></textarea>
-            <button type="submit">{{__('Отправить')}}</button>
-        </form>
+        <div class="mb-3">
+            <form method="POST" action="{{ $routeCreate }}">
+                @csrf
+                <textarea name="content" class="form-control" rows="3"
+                          placeholder="{{__('Напишите сообщение')}}"></textarea>
+                <button type="submit" class="btn btn-primary mt-2">{{__('Отправить')}}</button>
+            </form>
+        </div>
     @endauth
 
-    <div class="comments-list">
+    <div>
         @foreach ($comments as $comment)
-            <div class="comment">
-                <div class="user-info">
+
+            <div class="border-bottom d-flex justify-content-between align-items-center">
+                <div class="">
                     <div>
                         <span>{{ $comment->user->name }}</span>
                         <small>{{ $comment->created_at->format('j M Y, g:i a') }}</small>
                     </div>
-                    @if ($comment->user == auth()->user())
-                        <div class="dropdown">
-                            <button onclick="toggleMenu(this)">
-                                #
-                            </button>
-                            <div class="dropdown-menu hidden">
-                                <a
+                    <p>{{ $comment->content }}</p>
+                </div>
+
+                @if (Auth::user()->id=== $comment->user->id)
+                    <div class="dropdown">
+                        <img src="https://cdn-icons-png.flaticon.com/512/64/64576.png" alt="" width="20" height="20" class="d-inline-block align-text-top" data-bs-toggle="dropdown">
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item"
                                     @if(isset($category))
                                         href="{{ route($routeUpdate,compact('project','category','comment')) }}"
                                     @else
@@ -29,7 +34,10 @@
                                     @endif
 
                                 >{{__('Редактировать')}}</a>
-                                <form method="POST"
+                            </li>
+
+                            <li>
+                                <form method="POST" class="dropdown-item"
                                       @if(isset($category))
                                           action="{{ route($routeDelete,compact('project','category','comment')) }}"
                                       @else
@@ -37,27 +45,17 @@
                                     @endif>
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit">
+                                    <button type="submit" class="btn btn-link text-dark p-0 text-decoration-none text-reset" >
                                         {{__('Удалить')}}
                                     </button>
                                 </form>
-                            </div>
-                        </div>
-                    @endif
-                </div>
-                <p>{{ $comment->content }}</p>
+                            </li>
+                        </ul>
+                    </div>
+                @endif
+
             </div>
+
         @endforeach
     </div>
 </div>
-    <script>
-        function toggleMenu(button) {
-            var menu = button.nextElementSibling;
-            if (menu.style.display === 'block') {
-                menu.style.display = 'none';
-            } else {
-                menu.style.display = 'block';
-            }
-        }
-
-    </script>

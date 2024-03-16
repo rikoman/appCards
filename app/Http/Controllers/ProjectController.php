@@ -141,6 +141,6 @@ class ProjectController extends Controller
 
     public function subProjects()
     {
-        return view('subprojects', ['subprojects' => Auth::user()->subprojects()->paginate(9)]);
+        return view('project.subprojects', ['subprojects' => Auth::user()->subprojects()->paginate(9)]);
     }
 }
