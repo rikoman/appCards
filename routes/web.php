@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\CardController;
-use App\Http\Controllers\CardsController;
+use App\Http\Controllers\CardExcelController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\SearchController;
+use App\Http\Controllers\ProjectSearchController;
 use App\Models\Card;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
@@ -47,7 +47,7 @@ Route::prefix('/app/projects')->group(function () {
 
     Route::get('/sub', [ProjectController::class, 'subProjects'])->name('project.sub')->middleware('auth');
 
-    Route::get('/search', [SearchController::class, 'search'])->name('search');
+    Route::get('/search', [ProjectSearchController::class, 'search'])->name('search');
 
     Route::prefix('/{project}')->group(function () {
         Route::get('/', [ProjectController::class, 'show'])->name('project.show');
@@ -115,6 +115,6 @@ Route::prefix('/app/projects/{project}/categories/{category}/comments')->group(f
  * export and import model card
  */
 Route::prefix('/app/projects/{project}/categories/{category}/cards')->group(function (){
-    Route::get('/export', [CardsController::class, 'export'])->name('card.export');
-    Route::post('/import', [CardsController::class, 'import'])->name('card.import');
+    Route::get('/export', [CardExcelController::class, 'export'])->name('card.export');
+    Route::post('/import', [CardExcelController::class, 'import'])->name('card.import');
 });

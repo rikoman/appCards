@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
-class SearchController extends Controller
+class ProjectSearchController extends Controller
 {
     public function search(Request $request)
     {

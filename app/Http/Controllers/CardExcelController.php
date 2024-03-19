@@ -9,7 +9,7 @@ use App\Models\Project;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
-class CardsController extends Controller
+class CardExcelController extends Controller
 {
     public function export($project,$category)
     {
