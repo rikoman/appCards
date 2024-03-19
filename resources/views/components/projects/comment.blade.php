@@ -22,37 +22,44 @@
                     <p>{{ $comment->content }}</p>
                 </div>
 
-                @if (Auth::user()->id=== $comment->user->id)
-                    <div class="dropdown">
-                        <img src="https://cdn-icons-png.flaticon.com/512/64/64576.png" alt="" width="20" height="20" class="d-inline-block align-text-top" data-bs-toggle="dropdown">
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item"
-                                    @if(isset($category))
-                                        href="{{ route($routeUpdate,compact('project','category','comment')) }}"
-                                    @else
-                                        href="{{ route($routeUpdate,compact('project','comment')) }}"
-                                    @endif
+                @auth
+                    @if (Auth::user()->id=== $comment->user->id)
+                        <div class="dropdown">
+                            <img src="https://cdn-icons-png.flaticon.com/512/64/64576.png" alt="" width="20" height="20"
+                                 class="d-inline-block align-text-top" data-bs-toggle="dropdown">
 
-                                >{{__('Редактировать')}}</a>
-                            </li>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li>
+                                    <a class="dropdown-item"
+                                       @if(isset($category))
+                                           href="{{ route($routeUpdate,compact('project','category','comment')) }}"
+                                       @else
+                                           href="{{ route($routeUpdate,compact('project','comment')) }}"
+                                        @endif>
+                                        {{__('Редактировать')}}
+                                    </a>
+                                </li>
 
-                            <li>
-                                <form method="POST" class="dropdown-item"
-                                      @if(isset($category))
-                                          action="{{ route($routeDelete,compact('project','category','comment')) }}"
-                                      @else
-                                          action="{{ route($routeDelete,compact('project','comment')) }}"
-                                    @endif>
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-link text-dark p-0 text-decoration-none text-reset" >
-                                        {{__('Удалить')}}
-                                    </button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                @endif
+                                <li>
+                                    <form method="POST" class="dropdown-item"
+
+                                          @if(isset($category))
+                                              action="{{ route($routeDelete,compact('project','category','comment')) }}"
+                                          @else
+                                              action="{{ route($routeDelete,compact('project','comment')) }}"
+                                        @endif>
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                                class="btn btn-link text-dark p-0 text-decoration-none text-reset">
+                                            {{__('Удалить')}}
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    @endif
+                @endauth
 
             </div>
 
