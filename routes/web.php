@@ -67,6 +67,7 @@ Route::prefix('/app/projects')->group(function () {
 Route::prefix('/app/projects/{project}/categories')->group(function () {
     Route::get('/create', [CategoryController::class, 'create'])->name('category.create')->middleware('auth')->can('create', [Category::class, 'project']);
     Route::post('/', [CategoryController::class, 'store'])->name('category.store')->middleware('auth')->can('create', [Category::class, 'project']);
+    Route::get('/marathon', [CategoryController::class, 'marathon'])->name('category.marathon');
 
     Route::prefix('/{category}')->group(function () {
         Route::get('/', [CategoryController::class, 'show'])->name('category.show');

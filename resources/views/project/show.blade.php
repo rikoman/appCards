@@ -2,8 +2,7 @@
 @section('title', $project->title )
 @section('main')
     <div style="width: 70%; margin: auto">
-        <img src="{{ asset('storage/projects/' . $project->image) }}" alt="Изображение проекта" class="img-fluid mb-3"
-             width="100%" style="margin: auto">
+        <img src="{{ asset('storage/projects/' . $project->image) }}" alt="Изображение проекта" class="img-fluid mb-3" width="100%" style="margin: auto">
     </div>
 
     <h2>{{__('Категория')}}: {{ $project->title }}</h2>
@@ -36,8 +35,16 @@
 
     @auth
         @if (Auth::user()->can(['update'], $project))
-            <a style="width: 100%; margin-bottom: 10px" type="button" href="{{route('category.create',compact('project'))}}" class="btn btn-outline-success btn-lg btn-block">{{__('Cоздать категорию')}}</a>
+            <a style="width: 100%; margin-bottom: 10px" type="button" href="{{route('category.create',compact('project'))}}" class="btn btn-outline-success btn-lg btn-block">
+                {{__('Cоздать категорию')}}
+            </a>
         @endif
+    @endauth
+
+    @auth
+        <a style="width: 100%; margin-bottom: 10px" type="button" href="{{route('category.marathon',$project)}}" class="btn btn-outline-info btn-lg btn-block">
+            {{__('Марафон')}}
+        </a>
     @endauth
 
     @if (count($categories) > 0)

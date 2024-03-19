@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Project;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -87,5 +86,17 @@ class CategoryController extends Controller
     {
         $category->delete();
         return redirect()->route('project.show', $projectId);
+    }
+
+    public function marathon(Project $project)
+    {
+        $allCards = array();
+
+        foreach ($project->categories()->get() as $category){
+            foreach ($category->cards()->get() as $card){
+                $allCards[]=$card;
+            }
+        }
+        return view('card.marathon',compact('project','allCards'));
     }
 }
