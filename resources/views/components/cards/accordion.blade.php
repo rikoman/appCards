@@ -17,21 +17,21 @@
                                 @auth
                                     @if(Auth::user()->can(['update','delete'], $card))
                                         <td>
-                                            <div class="d-flex justify-content-between align-items-center ">
-                                                <div>
-                                                    <a class="btn btn-outline-success" href="{{ route('card.edit', compact('project','category','card')) }}">
-                                                        {{__('Редактировать')}}
-                                                    </a>
-                                                </div>
-                                                <div>
-                                                    <form action="{{ route('card.destroy',compact('project','category','card')) }}" method="post">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-outline-danger">
-                                                            {{__('Удалить')}}
-                                                        </button>
-                                                    </form>
-                                                </div>
+                                            <div>
+                                                <a class="btn btn-outline-success" href="{{ route('card.edit', compact('project','category','card')) }}">
+                                                    {{__('Редактировать')}}
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <form action="{{ route('card.destroy',compact('project','category','card')) }}" method="post">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-outline-danger">
+                                                        {{__('Удалить')}}
+                                                    </button>
+                                                </form>
                                             </div>
                                         </td>
                                     @endif

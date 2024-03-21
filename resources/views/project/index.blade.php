@@ -3,5 +3,5 @@
     {{__('Главная')}}
 @endsection
 @section('main')
-    <x-projects.project :project="$projects"/>
+    <x-projects.project :projects="$projects"/>
 @endsection
