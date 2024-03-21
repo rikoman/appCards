@@ -10,8 +10,8 @@ use Illuminate\Http\Request;
 class CardController extends Controller
 {
     private const CARD_VALIDATOR = [
-        'term' => 'required|min:2|max:50',
-        'definition' => 'required|min:2|max:50'
+        'term' => ['required', 'min:2', 'max:50'],
+        'definition' => ['required', 'min:2', 'max:50'],
     ];
     private const CARD_ERROR_MESSAGES = [
         'required' => 'Заполните поле',
@@ -53,7 +53,7 @@ class CardController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,$project,$category, Card $card)
+    public function update(Request $request, $project, $category, Card $card)
     {
         $validated = $request->validate(
             self::CARD_VALIDATOR,

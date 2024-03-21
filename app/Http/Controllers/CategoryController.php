@@ -9,8 +9,8 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
     private const CATEGORY_VALIDATOR = [
-        'title' => 'required|min:2|max:50',
-        'description' => 'nullable|min:10|max:150',
+        'title' => ['required', 'min:2', 'max:50'],
+        'description' => ['nullable', 'min:10', 'max:150'],
     ];
 
     private const CATEGORY_ERROR_MESSAGES = [
@@ -48,7 +48,7 @@ class CategoryController extends Controller
     public function show(Project $project, Category $category)
     {
         $cards = $category->cards()->get();
-        return view('category.show', compact( 'project', 'category','cards'));
+        return view('category.show', compact('project', 'category', 'cards'));
     }
 
     /**
@@ -56,7 +56,7 @@ class CategoryController extends Controller
      */
     public function edit($project, Category $category)
     {
-        return view('category.edit', compact('project','category'));
+        return view('category.edit', compact('project', 'category'));
     }
 
     /**
@@ -92,11 +92,11 @@ class CategoryController extends Controller
     {
         $allCards = array();
 
-        foreach ($project->categories()->get() as $category){
-            foreach ($category->cards()->get() as $card){
-                $allCards[]=$card;
+        foreach ($project->categories()->get() as $category) {
+            foreach ($category->cards()->get() as $card) {
+                $allCards[] = $card;
             }
         }
-        return view('card.marathon',compact('project','allCards'));
+        return view('card.marathon', compact('project', 'allCards'));
     }
 }

@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Storage;
 class ProjectController extends Controller
 {
     private const PROJECT_VALIDATOR = [
-        'title' => 'required|min:2|max:50',
-        'description' => 'nullable|min:10|max:150',
+        'title' => ['required', 'min:2', 'max:50'],
+        'description' => ['nullable', 'min:10', 'max:150'],
     ];
 
     private const PROJECT_ERROR_MESSAGES = [
@@ -51,23 +51,24 @@ class ProjectController extends Controller
     {
         $data = null;
 
-        $validated = $request->validate(
+        $validated = $request->validate(array_merge(
+            self::PROJECT_VALIDATOR,
             [
-                self::PROJECT_VALIDATOR,
-                'image'=>'required'
-            ],
+                'image' => ['required'],
+            ]),
             self::PROJECT_ERROR_MESSAGES,
         );
 
-        if ($request->hasFile('image')){
+        if ($request->hasFile('image')) {
             $data = $request->file('image')->store('', 'projects');
         }
-//        dd($request);
+
         Auth::user()->projects()->create([
-            'title' => $request->title,
-            'description' => $request->description,
+            'title' => $validated['title'],
+            'description' => $validated['description'],
             'image' => $data,
         ]);
+
         return redirect()->route('project.home');
     }
 
@@ -103,15 +104,16 @@ class ProjectController extends Controller
             self::PROJECT_ERROR_MESSAGES
         );
 
-        if ($request->hasFile('image')){
+        if ($request->hasFile('image')) {
             $data = $request->file('image')->store('', 'projects');
         }
 
         $project->fill([
             'title' => $validated['title'],
             'description' => $validated['description'],
-            'image'=>$data
+            'image' => $data
         ]);
+
         $project->save();
 
         return redirect()->route('project.home');
